@@ -4,22 +4,18 @@ import { LetterCell, LetterState } from "./LetterCell";
 type Props = {
   word: string;
   currentUserInput: string | null;
-  refreshCurrentWord: () => void;
   handleWordProperlyTyped: () => void;
 };
 
 export const Letters = ({
   word,
   currentUserInput,
-  refreshCurrentWord,
   handleWordProperlyTyped,
 }: Props) => {
   const currentUserInputLength = useMemo(
     () => currentUserInput?.length || 0,
     [currentUserInput?.length]
   );
-
-  console.log({ word, currentUserInput });
 
   const getLetterState = (letterCellIdx: number): LetterState => {
     switch (true) {
@@ -37,13 +33,7 @@ export const Letters = ({
   useEffect(() => {
     if (currentUserInputLength !== word.length) return;
     handleWordProperlyTyped();
-    refreshCurrentWord();
-  }, [
-    currentUserInputLength,
-    handleWordProperlyTyped,
-    refreshCurrentWord,
-    word.length,
-  ]);
+  }, [currentUserInputLength, handleWordProperlyTyped, word.length]);
 
   return (
     <div style={{ display: "flex", gap: "5px", justifyContent: "center" }}>

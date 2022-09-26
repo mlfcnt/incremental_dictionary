@@ -16,3 +16,8 @@ export const retrieveSave = () => {
   const totalWords = localStorage.getItem(TOTAL_WORDS);
   return Number(totalWords);
 };
+
+export const resetSave = () => {
+  localStorage.setItem(TOTAL_WORDS, String(0));
+  window.location.reload();
+};

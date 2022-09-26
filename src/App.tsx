@@ -3,16 +3,21 @@ import "./App.css";
 import { Letters } from "./components/Letters";
 import { useRandomWord } from "./helpers.ts/current-word-helpers";
 import { handleKeyPressed } from "./helpers.ts/handleKeyPressed";
-import { retrieveSave, useSave } from "./helpers.ts/local-storage-save-helpers";
+import {
+  retrieveSave,
+  useSave,
+  resetSave,
+} from "./helpers.ts/local-storage-save-helpers";
 
 type Word = string;
 export type WordDic = Record<Word, number>;
 
 function App() {
+  const { currentWord, refreshCurrentWord, allWords, setWordsYetToWrite } =
+    useRandomWord();
   const [totalWordsWritten, setTotalWordsWritten] = useState(
     () => retrieveSave() || 0
   );
-  const { currentWord, refreshCurrentWord } = useRandomWord(5);
 
   const [currentUserInput, setCurrentUserInput] = useState<string | null>(null);
   useSave({ totalWordsWritten });
@@ -33,25 +38,34 @@ function App() {
     };
   }, [handleUserKeyPress]);
 
-  if (!currentWord) {
+  if (!currentWord || !allWords) {
     return <p>Loading...</p>;
   }
 
   const handleWordProperlyTyped = () => {
     setCurrentUserInput("");
     setTotalWordsWritten(totalWordsWritten + 1);
+    setWordsYetToWrite(allWords.filter((x) => x !== currentWord));
+    refreshCurrentWord();
   };
 
   return (
     <>
       <h1>Incremental dictionary</h1>
-      <h2>Total words written : {totalWordsWritten}</h2>
+      <h2>
+        Total words written : {totalWordsWritten} / {allWords.length}
+      </h2>
       <Letters
         word={currentWord}
         currentUserInput={currentUserInput}
-        refreshCurrentWord={refreshCurrentWord}
         handleWordProperlyTyped={handleWordProperlyTyped}
       />
+      <button
+        style={{ position: "absolute", top: "2vh", left: "2vw" }}
+        onClick={resetSave}
+      >
+        Reset game
+      </button>
     </>
   );
 }
