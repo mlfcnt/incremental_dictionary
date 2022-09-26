@@ -3,15 +3,19 @@ import "./App.css";
 import { Letters } from "./components/Letters";
 import { useRandomWord } from "./helpers.ts/current-word-helpers";
 import { handleKeyPressed } from "./helpers.ts/handleKeyPressed";
+import { retrieveSave, useSave } from "./helpers.ts/local-storage-save-helpers";
 
 type Word = string;
 export type WordDic = Record<Word, number>;
 
 function App() {
-  const [totalWordsWritten, setTotalWordsWritten] = useState(0);
+  const [totalWordsWritten, setTotalWordsWritten] = useState(
+    () => retrieveSave() || 0
+  );
   const { currentWord, refreshCurrentWord } = useRandomWord(5);
 
   const [currentUserInput, setCurrentUserInput] = useState<string | null>(null);
+  useSave({ totalWordsWritten });
 
   const handleUserKeyPress = useCallback(
     (event: KeyboardEvent) => {
@@ -33,7 +37,10 @@ function App() {
     return <p>Loading...</p>;
   }
 
-  const resetCurrentUserInput = () => setCurrentUserInput("");
+  const handleWordProperlyTyped = () => {
+    setCurrentUserInput("");
+    setTotalWordsWritten(totalWordsWritten + 1);
+  };
 
   return (
     <>
@@ -43,10 +50,7 @@ function App() {
         word={currentWord}
         currentUserInput={currentUserInput}
         refreshCurrentWord={refreshCurrentWord}
-        handleWordProperlyTyped={() => {
-          resetCurrentUserInput();
-          setTotalWordsWritten(totalWordsWritten + 1);
-        }}
+        handleWordProperlyTyped={handleWordProperlyTyped}
       />
     </>
   );
