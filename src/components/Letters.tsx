@@ -16,11 +16,6 @@ export const Letters = ({ automated = false }: Props) => {
   const [completedWords, setCompletedWords] =
     useRecoilState(completedWordsState);
 
-  const markWordAsCompleted = useCallback(() => {
-    setCompletedWords([...completedWords, randomWord]);
-    setRandomWord(getRandomWord);
-  }, [getRandomWord, randomWord, setCompletedWords]);
-
   const [currentUserInput, setCurrentUserInput] = useState<string | null>(null);
 
   useEffect(() => {
@@ -60,8 +55,9 @@ export const Letters = ({ automated = false }: Props) => {
   const handleWordProperlyTyped = useCallback(() => {
     if (!randomWord) return;
     setCurrentUserInput("");
-    markWordAsCompleted();
-  }, [markWordAsCompleted, randomWord]);
+    setCompletedWords([...completedWords, randomWord]);
+    setRandomWord(getRandomWord);
+  }, [getRandomWord, randomWord, setCompletedWords]);
 
   useEffect(() => {
     if (currentUserInputLength !== randomWord?.length) return;

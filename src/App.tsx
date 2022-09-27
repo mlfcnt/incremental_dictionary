@@ -30,7 +30,7 @@ function App() {
     <>
       <h1>Incremental dictionary</h1>
       <h2>
-        Total words written : {completedWords.length} / {allWords.length}
+        Total words completed : {completedWords.length} / {allWords.length}
       </h2>
       <Letters />
       <Workers />
