@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { retrieveSave } from "./local-storage-save-helpers";
 import { useWordList } from "./useWordList";
 
 export const useRandomWord = (maxWordLength = 40) => {
@@ -6,6 +7,9 @@ export const useRandomWord = (maxWordLength = 40) => {
   const { ALL_WORDS } = useWordList();
   const [currentWord, setCurrentWord] = useState<string | null>();
   const [wordsYetToWrite, setWordsYetToWrite] = useState<string[]>([]);
+  const [wordsCompleted, setWordsCompleted] = useState<string[]>(
+    () => retrieveSave()?.wordsCompleted
+  );
 
   const filteredByLength = useMemo(
     () => (ALL_WORDS || []).filter((word) => word.length <= maxWordLength, []),
@@ -33,5 +37,7 @@ export const useRandomWord = (maxWordLength = 40) => {
     refreshCurrentWord: refreshWord,
     allWords: filteredByLength,
     setWordsYetToWrite,
+    wordsCompleted,
+    setWordsCompleted,
   };
 };

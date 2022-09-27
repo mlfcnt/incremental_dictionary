@@ -1,26 +1,32 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import "./App.css";
 import { Letters } from "./components/Letters";
 import { useRandomWord } from "./helpers.ts/current-word-helpers";
 import { handleKeyPressed } from "./helpers.ts/handleKeyPressed";
-import {
-  retrieveSave,
-  useSave,
-  resetSave,
-} from "./helpers.ts/local-storage-save-helpers";
+import { useSave, resetSave } from "./helpers.ts/local-storage-save-helpers";
 
 type Word = string;
 export type WordDic = Record<Word, number>;
 
 function App() {
-  const { currentWord, refreshCurrentWord, allWords, setWordsYetToWrite } =
-    useRandomWord();
-  const [totalWordsWritten, setTotalWordsWritten] = useState(
-    () => retrieveSave() || 0
+  const {
+    currentWord,
+    refreshCurrentWord,
+    allWords,
+    setWordsYetToWrite,
+    wordsCompleted,
+    setWordsCompleted,
+  } = useRandomWord();
+
+  console.log({ wordsCompleted });
+
+  const totalWordsCompleted = useMemo(
+    () => wordsCompleted?.length || 0,
+    [wordsCompleted?.length]
   );
 
   const [currentUserInput, setCurrentUserInput] = useState<string | null>(null);
-  useSave({ totalWordsWritten });
+  useSave({ wordsCompleted });
 
   const handleUserKeyPress = useCallback(
     (event: KeyboardEvent) => {
@@ -44,7 +50,7 @@ function App() {
 
   const handleWordProperlyTyped = () => {
     setCurrentUserInput("");
-    setTotalWordsWritten(totalWordsWritten + 1);
+    setWordsCompleted([...(wordsCompleted || []), currentWord]);
     setWordsYetToWrite(allWords.filter((x) => x !== currentWord));
     refreshCurrentWord();
   };
@@ -53,7 +59,7 @@ function App() {
     <>
       <h1>Incremental dictionary</h1>
       <h2>
-        Total words written : {totalWordsWritten} / {allWords.length}
+        Total words written : {totalWordsCompleted} / {allWords.length}
       </h2>
       <Letters
         word={currentWord}
