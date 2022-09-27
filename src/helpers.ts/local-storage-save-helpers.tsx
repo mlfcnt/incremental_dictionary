@@ -2,27 +2,24 @@ import { useEffect } from "react";
 // import { compressToUTF16, decompressFromUTF16 } from "lz-string"; //TODO maybe ?
 
 type Props = {
-  wordsCompleted: string[];
+  completedWords: string[];
 };
 
 const LOCAL_STORAGE_KEY = "inc_dic";
 
-export const useSave = ({ wordsCompleted }: Props) => {
+export const useSave = ({ completedWords }: Props) => {
   useEffect(() => {
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify({ wordsCompleted }));
-  }, [wordsCompleted]);
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify({ completedWords }));
+  }, [completedWords]);
 };
 
-export const retrieveSave = () => {
+export const retrieveSave = (): string[] => {
   const saveContent = localStorage.getItem(LOCAL_STORAGE_KEY);
-  if (!saveContent) return;
-  const { wordsCompleted } = JSON.parse(saveContent);
+  if (!saveContent) return [];
+  const { completedWords }: { completedWords: string[] } =
+    JSON.parse(saveContent);
 
-  console.log("parsed", wordsCompleted);
-
-  return {
-    wordsCompleted,
-  };
+  return completedWords;
 };
 
 export const resetSave = () => {

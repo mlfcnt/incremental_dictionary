@@ -7,7 +7,7 @@ export const handleKeyPressed = (
   setCurrentUserInput: Dispatch<SetStateAction<string | null>>
 ) => {
   const letterToGuess = currentWord[currentUserInput?.length || 0];
-  if (keyPressed === letterToGuess) {
+  if (keyPressed?.toUpperCase() === letterToGuess?.toUpperCase()) {
     setCurrentUserInput(`${currentUserInput || ""}${keyPressed}`);
   }
 };
