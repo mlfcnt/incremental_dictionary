@@ -9,8 +9,13 @@ export const wordState = selector({
   get: async ({ get }) => {
     const allWords = await getAllWords();
     const wordsToComplete = get(wordsToCompleteState);
-    const getRandomWord = () =>
-      wordsToComplete?.[Math.floor(Math.random() * wordsToComplete.length)];
+    const getRandomWord = () => {
+      const filteredByLength = wordsToComplete.filter((x) => x.length === 4);
+      return filteredByLength?.[
+        Math.floor(Math.random() * filteredByLength.length)
+      ];
+    };
+
     return { wordsToComplete, allWords, getRandomWord };
   },
 });
