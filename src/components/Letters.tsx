@@ -59,9 +59,9 @@ export const Letters = ({ automated = false }: Props) => {
   const updateCompletedWords = () =>
     setCompletedWords([...completedWords, randomWord]);
 
-  const updateCoins = () => {
+  const updateCoins = useCallback(() => {
     setCurrentCoins(currentCoins + 1 * currentCoinMultiplier);
-  };
+  }, [currentCoinMultiplier, currentCoins, setCurrentCoins]);
 
   const handleWordProperlyTyped = useCallback(() => {
     if (!randomWord) return;

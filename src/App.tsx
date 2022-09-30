@@ -30,7 +30,9 @@ function App() {
   return (
     <>
       <h1 style={{ display: "inline" }}>Incremental dictionary </h1>{" "}
-      <h3 style={{ display: "inline" }}>(Not a game yet...)</h3>
+      <h3 style={{ display: "inline", color: "red" }}>
+        (It is not meant to be played yet...)
+      </h3>
       <h2>
         Total words completed : {completedWords.length} / {allWords.length}
       </h2>
