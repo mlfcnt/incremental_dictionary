@@ -27,6 +27,15 @@ function App() {
     return <p>Loading...</p>;
   }
 
+  const onReset = () => {
+    const confirmation = window.confirm(
+      "Are you sure you want to delete your save ?"
+    );
+    if (confirmation) {
+      resetSave();
+    }
+  };
+
   return (
     <>
       <h1 style={{ display: "inline" }}>Incremental dictionary </h1>{" "}
@@ -43,13 +52,13 @@ function App() {
       </div>
       <button
         style={{ position: "absolute", top: "2vh", left: "2vw" }}
-        onClick={resetSave}
+        onClick={onReset}
       >
         Reset game
       </button>
-      <div style={{ position: "absolute", top: "70vh", left: "2vw" }}>
+      {/* <div style={{ position: "absolute", top: "70vh", left: "2vw" }}>
         <Upgrades />
-      </div>
+      </div> */}
     </>
   );
 }
